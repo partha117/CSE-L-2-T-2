@@ -141,29 +141,7 @@ class heap
             minHeapify(smallest);
         }
     }
-    private  void maxHeapify(int target)
-    {
-        int l=target*2;
 
-        int r=(target*2)+1;
-        int greatest=target;
-        if((l<=size)&&(array[l].frequency>array[target].frequency))
-        {
-            greatest=l;
-        }
-        if((r<=size)&&(array[r].frequency>array[greatest].frequency))
-        {
-            greatest=r;
-        }
-        if(greatest!=target)
-        {
-            //System.out.println("smallest "+array[smallest].frequency);
-            node temp=array[greatest];
-            array[greatest]=array[target];
-            array[target]=temp;
-            minHeapify(greatest);
-        }
-    }
     int getSize()
     {
         return  size;
@@ -289,6 +267,7 @@ public class code1 {
         bufferedReader.close();
         fileReader.close();
         heap myHeap=new heap();
+        long startTime=System.nanoTime();
         for(int i=0;i<length;i++)
         {
             myHeap.minAdd(new node(ar[i], ar1[i]));
@@ -316,7 +295,16 @@ public class code1 {
         }
 
 
+
         getCode(myHeap.top(), "");
+        long endTime=System.nanoTime();
+        FileWriter fileWriter = new FileWriter("output.txt",true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.write("Running time : "+((double)(endTime-startTime))/ 1000000000+"s or "+(endTime-startTime)+" nanosecond");
+        bufferedWriter.newLine();
+        bufferedWriter.close();
+        fileWriter.close();
+
 
         heap myHeap2=new heap();
 
