@@ -9,7 +9,9 @@ VAR1 DW ?
 MAIN PROC
      
     MOV AX,@DATA
-    MOV DS,AX 
+    MOV DS,AX  
+    
+    LOOP_STARTED:
     CALL INPUT
       
  
@@ -18,6 +20,12 @@ MAIN PROC
     
     MOV AX, CX  ; AS OUTPUT IS SHOWN FROM AX
     CALL OUTPUT
+    
+     
+    JMP LOOP_STARTED 
+    
+    
+    LOOP_END:
     
     MOV AH,4CH
     INT 21H  
@@ -101,7 +109,8 @@ SERIES_SUM PROC
     
     PUSH DX
     
-    MOV DX,0 
+    MOV DX,0   
+    SUB AX,1
     
     
     
@@ -148,8 +157,10 @@ INPUT PROC
    MOV AH,1
    INT 21H 
    CMP AL, 0DH  ;IF ENTER THEN TERMINATE
-   JNE INPUT1_LOOP
-   JMP INPUT1_END
+   JE INPUT1_END  
+   CMP AL,1AH
+   JE LOOP_END
+   ;JMP INPUT1_LOOP
    INPUT1_LOOP:
    ;CMP AL,1AH   ; CHECKING EOF
    ;JE OUT_OF_THE_LOOP 
@@ -226,7 +237,15 @@ OUTPUT PROC
    MOV AX,VAR1           ;NOW WE HAVE REMANDER OF OUTPUT DIVISION
    DIV CX                ;DIVIDING
    JMP SECOND_DIVISION   ;REPEAT
-   END_OF_OUTPUT:        ;END 
+   END_OF_OUTPUT:        ;END    
+   
+   
+   MOV DL,0DH   
+   MOV AH,2
+   INT 21H
+   MOV DL,0AH
+   INT 21H
+   
    
    POP VAR1
    POP TOTAL
