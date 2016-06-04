@@ -1,22 +1,22 @@
-.model small
-draw_row Macro x
-    Local l1
-; draws a line in row x from col 10 to col 300
+.MODEL SMALL
+DRAW_ROW MACRO X
+    LOCAL L1
+; DRAWS A LINE IN ROW X FROM COL 10 TO COL 300
     MOV AH, 0CH
     MOV AL, 4
     MOV CX, 0
-    MOV DX, x
-L1: INT 10h
+    MOV DX, X
+L1: INT 10H
     INC CX
     CMP CX, 320
     JL L1
-    EndM
-.stack 100h
-.data
-height1 dw 51 
-width1 dw 65
- v1 dw ?
- v2 dw ?
+    ENDM
+.STACK 100H
+.DATA
+HEIGHT1 DW 51 
+WIDTH1 DW 65
+ V1 DW ?
+ V2 DW ?
 CUR_POSX_USER  DW 61
 CUR_POSY_USER  DW 75
 VAR DB ?
@@ -41,9 +41,9 @@ TDELAY DW ?
 STRING DW 'S','C','O','R','E','-',' ',?,?,?,?
 SCORE DW 0
 
-.code
+.CODE
 
-drawcar proc
+DRAWCAR PROC
 
     PUSH AX
     MOV V1, CX
@@ -60,7 +60,7 @@ L1:
     INC CX
     
     PUSH DX 
-       l2:INT 10H
+       L2:INT 10H
           INC DX
           CMP DX,V2
           JL L2
@@ -68,18 +68,18 @@ L1:
     CMP CX, V1        
     JL L1
     ;MOV AH,0
-    ;int 16H
+    ;INT 16H
     
-    ret
+    RET
    
        
     
     RET 
-drawcar endp
-main proc
+DRAWCAR ENDP
+MAIN PROC
 MOV AX,@DATA
 MOV DS,AX
-call drawscreen
+CALL DRAWSCREEN
 
 
 INFINITE:
@@ -99,18 +99,18 @@ INFINITE:
          CALL COL
          CMP CF,1
          JE OP 
-         call draw2
+         CALL DRAW2
          CALL LISTEN_KEYBOARD
-         call draw3
+         CALL DRAW3
          
          
          
          
-         jmp INFINITE
+         JMP INFINITE
          
  OP:
  CALL SETTEXT
-main endp
+MAIN ENDP
 
 DELAY PROC
 PUSH AX
@@ -122,11 +122,11 @@ PUSH DI
 
   MOV DI, TDELAY
   MOV AH, 0
-  INT 1Ah
+  INT 1AH
   MOV BX, DX
   GO1:
   MOV AH, 0
-  INT 1Ah
+  INT 1AH
   SUB DX, BX
   CMP DI, DX
   JA GO1
@@ -224,7 +224,7 @@ NM2:
 
 
 NM4:  
-    ; for draw3
+    ; FOR DRAW3
     MOV AX,POSY3
     CMP CUR_POSY_USER,AX
     JG NM6
@@ -330,16 +330,16 @@ RET
 REMOVECAR ENDP
 
 
-drawscreen proc
-mov al,13H
-mov ah,0h
-int 10h
-mov ax,10
-draw_row 66
-draw_row 133
+DRAWSCREEN PROC
+MOV AL,13H
+MOV AH,0H
+INT 10H
+MOV AX,10
+DRAW_ROW 66
+DRAW_ROW 133
 
-ret
-drawscreen endp
+RET
+DRAWSCREEN ENDP
 
 DRAW1 PROC
          
@@ -508,25 +508,25 @@ GETSCORE PROC
 
 
 GETSCORE ENDP
-SETTEXT proc
+SETTEXT PROC
 
 CALL GETSCORE
-mov ax,@data        ; set up ds as the segment for data
-mov es,ax       ; put this in es
+MOV AX,@DATA        ; SET UP DS AS THE SEGMENT FOR DATA
+MOV ES,AX       ; PUT THIS IN ES
 
-mov bp,OFFSET STRING  ; ES:BP points to message
-mov ah,13h      ; function 13 - write string
-mov al,01h      ; attrib in bl,move cursor
-xor bh,bh       ; video page 0
-mov bl,STRING_COLOR        ; attribute - magenta
-mov cx,STRINGL       ; length of string
-mov dh,STRINGR        ; row to put string
-mov dl,STRINGC       ; column to put string
-int 10h         ; call BIOS service
+MOV BP,OFFSET STRING  ; ES:BP POINTS TO MESSAGE
+MOV AH,13H      ; FUNCTION 13 - WRITE STRING
+MOV AL,01H      ; ATTRIB IN BL,MOVE CURSOR
+XOR BH,BH       ; VIDEO PAGE 0
+MOV BL,STRING_COLOR        ; ATTRIBUTE - MAGENTA
+MOV CX,STRINGL       ; LENGTH OF STRING
+MOV DH,STRINGR        ; ROW TO PUT STRING
+MOV DL,STRINGC       ; COLUMN TO PUT STRING
+INT 10H         ; CALL BIOS SERVICE
 
-mov ax,4C00h        ; return to DOS
-int 21h 
+MOV AX,4C00H        ; RETURN TO DOS
+INT 21H 
 SETTEXT ENDP
 
 
-end main
+END MAIN
